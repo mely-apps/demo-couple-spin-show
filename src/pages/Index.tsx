@@ -9,6 +9,8 @@ import { couples } from "@/data/couples";
 
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [inputtedMales, setInputtedMales] = useState<string[]>([]);
+  const [inputtedFemales, setInputtedFemales] = useState<string[]>([]);
   const totalSlides = couples.length + 3; // Cover + Input + 18 couples + Ending
 
   useEffect(() => {
@@ -72,7 +74,15 @@ const Index = () => {
     
     // Input slide
     if (currentSlide === 1) {
-      return <InputSlide onComplete={() => setCurrentSlide(2)} />;
+      return (
+        <InputSlide 
+          onComplete={(males, females) => {
+            setInputtedMales(males);
+            setInputtedFemales(females);
+            setCurrentSlide(2);
+          }} 
+        />
+      );
     }
     
     // Ending slide
@@ -84,12 +94,26 @@ const Index = () => {
     const coupleIndex = currentSlide - 2;
     const couple = couples[coupleIndex];
     
+    // Find the inputted names that match this couple (case-insensitive, trim spaces)
+    const findName = (nameToFind: string, nameList: string[]) => {
+      const normalized = nameToFind.toLowerCase().trim();
+      return nameList.find(n => n.toLowerCase().trim() === normalized) || nameToFind;
+    };
+    
+    const displayMale = inputtedMales.length > 0 
+      ? findName(couple.male, inputtedMales)
+      : couple.male;
+    
+    const displayFemale = inputtedFemales.length > 0
+      ? findName(couple.female, inputtedFemales)
+      : couple.female;
+    
     return (
       <SlotMachineSlide
         coupleNumber={couple.id}
         totalCouples={couples.length}
-        maleName={couple.male}
-        femaleName={couple.female}
+        maleName={displayMale}
+        femaleName={displayFemale}
       />
     );
   };

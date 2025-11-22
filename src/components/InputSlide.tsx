@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Users, ArrowRight } from "lucide-react";
 
 interface InputSlideProps {
-  onComplete: () => void;
+  onComplete: (maleNames: string[], femaleNames: string[]) => void;
 }
 
 export const InputSlide = ({ onComplete }: InputSlideProps) => {
@@ -97,7 +97,7 @@ export const InputSlide = ({ onComplete }: InputSlideProps) => {
 
       {/* Continue Button */}
       <Button
-        onClick={onComplete}
+        onClick={() => onComplete(maleNames, femaleNames)}
         size="lg"
         className="mt-8 text-3xl px-12 py-8 rounded-full shadow-2xl font-black z-10 animate-slide-in-up"
         style={{ 
