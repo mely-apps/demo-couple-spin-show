@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CoverSlide } from "@/components/CoverSlide";
+import { InputSlide } from "@/components/InputSlide";
 import { SlotMachineSlide } from "@/components/SlotMachineSlide";
 import { EndingSlide } from "@/components/EndingSlide";
 import { couples } from "@/data/couples";
 
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const totalSlides = couples.length + 2; // Cover + 18 couples + Ending
+  const totalSlides = couples.length + 3; // Cover + Input + 18 couples + Ending
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -69,13 +70,18 @@ const Index = () => {
       return <CoverSlide />;
     }
     
+    // Input slide
+    if (currentSlide === 1) {
+      return <InputSlide onComplete={() => setCurrentSlide(2)} />;
+    }
+    
     // Ending slide
     if (currentSlide === totalSlides - 1) {
       return <EndingSlide />;
     }
 
-    // Couple slides (1-18)
-    const coupleIndex = currentSlide - 1;
+    // Couple slides (2-19)
+    const coupleIndex = currentSlide - 2;
     const couple = couples[coupleIndex];
     
     return (
