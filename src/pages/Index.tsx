@@ -5,13 +5,14 @@ import { CoverSlide } from "@/components/CoverSlide";
 import { InputSlide } from "@/components/InputSlide";
 import { SlotMachineSlide } from "@/components/SlotMachineSlide";
 import { EndingSlide } from "@/components/EndingSlide";
-import { couples } from "@/data/couples";
+// Không cần import couples nữa vì random từ danh sách đã nhập
 
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [inputtedMales, setInputtedMales] = useState<string[]>([]);
   const [inputtedFemales, setInputtedFemales] = useState<string[]>([]);
-  const totalSlides = couples.length + 3; // Cover + Input + couples + Ending
+  const numberOfCouples = 18; // Số cặp cần ghép
+  const totalSlides = numberOfCouples + 3; // Cover + Input + 18 couples + Ending
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -91,14 +92,15 @@ const Index = () => {
     }
 
     // Couple slides - Random selection happens inside SlotMachineSlide
-    const coupleIndex = currentSlide - 2;
-    const couple = couples[coupleIndex];
+    // Mỗi slide sẽ random một cặp mới từ danh sách đã nhập
+    const coupleIndex = currentSlide - 2; // Index của slide couple (bắt đầu từ 0)
+    const coupleNumber = coupleIndex + 1; // Số thứ tự cặp (1-18)
     
     return (
       <SlotMachineSlide
         key={currentSlide}
-        coupleNumber={couple.id}
-        totalCouples={couples.length}
+        coupleNumber={coupleNumber}
+        totalCouples={numberOfCouples}
         maleNames={inputtedMales.filter(name => name.trim() !== "")}
         femaleNames={inputtedFemales.filter(name => name.trim() !== "")}
         onNext={() => setCurrentSlide(currentSlide + 1)}
