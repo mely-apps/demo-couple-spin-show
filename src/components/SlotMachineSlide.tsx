@@ -8,6 +8,7 @@ interface SlotMachineSlideProps {
   totalCouples: number;
   maleName: string;
   femaleName: string;
+  onNext: () => void;
 }
 
 export const SlotMachineSlide = ({
@@ -15,6 +16,7 @@ export const SlotMachineSlide = ({
   totalCouples,
   maleName,
   femaleName,
+  onNext,
 }: SlotMachineSlideProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [showResult, setShowResult] = useState(false);
@@ -24,12 +26,12 @@ export const SlotMachineSlide = ({
     
     setIsSpinning(true);
     
-    // Animate for 3 seconds then show result
+    // Animate for 18 seconds then show result
     setTimeout(() => {
       setIsSpinning(false);
       setShowResult(true);
       createConfetti();
-    }, 3000);
+    }, 18000);
   };
 
   const createConfetti = () => {
@@ -156,8 +158,8 @@ export const SlotMachineSlide = ({
 
       {/* Controls */}
       <Button
-        onClick={handleSpin}
-        disabled={isSpinning || showResult}
+        onClick={showResult ? onNext : handleSpin}
+        disabled={isSpinning}
         size="lg"
         className="mt-8 text-4xl px-16 py-8 rounded-full shadow-2xl font-black z-10 animate-slide-in-up"
         style={{ 

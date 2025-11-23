@@ -1,6 +1,10 @@
 import { Heart, Crown, Sparkles } from "lucide-react";
 
-export const CoverSlide = () => {
+interface CoverSlideProps {
+  onNext: () => void;
+}
+
+export const CoverSlide = ({ onNext }: CoverSlideProps) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary to-accent flex items-center justify-center relative overflow-hidden p-8">
       {/* Decorative Background Elements */}
@@ -41,13 +45,16 @@ export const CoverSlide = () => {
         </h2>
 
         {/* Info Badge */}
-        <div className="inline-block bg-white/20 backdrop-blur-md rounded-full px-12 py-5 border-2 border-white/30 shadow-2xl">
+        <button 
+          onClick={onNext}
+          className="inline-block bg-white/20 backdrop-blur-md rounded-full px-12 py-5 border-2 border-white/30 shadow-2xl hover:bg-white/30 transition-all hover:scale-105 cursor-pointer"
+        >
           <p className="text-2xl md:text-3xl text-white font-bold flex items-center gap-3">
             <span>♂</span>
             Ghép Đôi Ngẫu Nhiên
             <span>♀</span>
           </p>
-        </div>
+        </button>
 
         {/* Instruction */}
         <p className="mt-12 text-white/70 text-lg italic">
