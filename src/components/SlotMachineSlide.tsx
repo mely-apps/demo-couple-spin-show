@@ -36,7 +36,7 @@ export const SlotMachineSlide = ({
       setCurrentFemaleName(dummyFemaleNames[Math.floor(Math.random() * dummyFemaleNames.length)]);
     }, 120);
 
-    // Animate for 5 seconds then show result
+    // Animate for 8 seconds then show result
     setTimeout(() => {
       if (spinIntervalRef.current !== null) {
         clearInterval(spinIntervalRef.current);
@@ -45,7 +45,7 @@ export const SlotMachineSlide = ({
       setIsSpinning(false);
       setShowResult(true);
       createConfetti();
-    }, 5000);
+    }, 8000);
   };
 
   const createConfetti = () => {

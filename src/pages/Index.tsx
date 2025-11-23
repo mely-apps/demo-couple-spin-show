@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CoverSlide } from "@/components/CoverSlide";
-import { DemoSlide } from "@/components/DemoSlide";
 import { InputSlide } from "@/components/InputSlide";
 import { SlotMachineSlide } from "@/components/SlotMachineSlide";
 import { EndingSlide } from "@/components/EndingSlide";
@@ -12,7 +11,7 @@ const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [inputtedMales, setInputtedMales] = useState<string[]>([]);
   const [inputtedFemales, setInputtedFemales] = useState<string[]>([]);
-  const totalSlides = couples.length + 4; // Demo + Cover + Input + 18 couples + Ending
+  const totalSlides = couples.length + 3; // Cover + Input + 18 couples + Ending
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -68,24 +67,19 @@ const Index = () => {
   };
 
   const renderSlide = () => {
-    // Demo slide
-    if (currentSlide === 0) {
-      return <DemoSlide onNext={() => setCurrentSlide(1)} />;
-    }
-    
     // Cover slide
-    if (currentSlide === 1) {
-      return <CoverSlide onNext={() => setCurrentSlide(2)} />;
+    if (currentSlide === 0) {
+      return <CoverSlide onNext={() => setCurrentSlide(1)} />;
     }
     
     // Input slide
-    if (currentSlide === 2) {
+    if (currentSlide === 1) {
       return (
         <InputSlide 
           onComplete={(males, females) => {
             setInputtedMales(males);
             setInputtedFemales(females);
-            setCurrentSlide(3);
+            setCurrentSlide(2);
           }} 
         />
       );
@@ -96,8 +90,8 @@ const Index = () => {
       return <EndingSlide />;
     }
 
-    // Couple slides (3-20)
-    const coupleIndex = currentSlide - 3;
+    // Couple slides (2-19)
+    const coupleIndex = currentSlide - 2;
     const couple = couples[coupleIndex];
     
     // Find the inputted names that match this couple (case-insensitive, trim spaces)
