@@ -69,7 +69,7 @@ const Index = () => {
   const renderSlide = () => {
     // Cover slide
     if (currentSlide === 0) {
-      return <CoverSlide />;
+      return <CoverSlide onNext={() => setCurrentSlide(1)} />;
     }
     
     // Input slide
@@ -110,10 +110,12 @@ const Index = () => {
     
     return (
       <SlotMachineSlide
+        key={currentSlide}
         coupleNumber={couple.id}
         totalCouples={couples.length}
         maleName={displayMale}
         femaleName={displayFemale}
+        onNext={() => setCurrentSlide(currentSlide + 1)}
       />
     );
   };
@@ -154,21 +156,6 @@ const Index = () => {
         </Button>
       </div>
 
-      {/* Progress Dots */}
-      <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 flex gap-2">
-        {Array.from({ length: totalSlides }).map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrentSlide(idx)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              idx === currentSlide 
-                ? 'bg-celebration w-8' 
-                : 'bg-white/50 hover:bg-white/80'
-            }`}
-            aria-label={`Go to slide ${idx + 1}`}
-          />
-        ))}
-      </div>
     </div>
   );
 };
