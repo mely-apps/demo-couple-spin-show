@@ -97,25 +97,29 @@ export const SlotMachineSlide = ({
               <span>♂</span> Nam
             </div>
             <div className="bg-white rounded-2xl h-48 overflow-hidden shadow-inner border-4 border-card relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                {isSpinning ? (
-                  <div className="flex flex-col gap-2 animate-slot-spin">
-                    {dummyMaleNames.map((name, idx) => (
-                      <div key={idx} className="h-48 flex items-center justify-center text-3xl font-black text-primary px-4 text-center">
+              {isSpinning ? (
+                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                  <div className="flex flex-col animate-slot-spin">
+                    {[...dummyMaleNames, ...dummyMaleNames, ...dummyMaleNames].map((name, idx) => (
+                      <div key={idx} className="h-48 flex items-center justify-center text-3xl font-black text-primary px-4 text-center shrink-0">
                         {name}
                       </div>
                     ))}
                   </div>
-                ) : showResult ? (
+                </div>
+              ) : showResult ? (
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-4xl font-black text-primary px-6 text-center bg-muted rounded-xl py-8 shadow-lg animate-slide-in-up">
                     {maleName}
                   </div>
-                ) : (
+                </div>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-4xl font-black text-muted-foreground">
                     ???
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -132,25 +136,29 @@ export const SlotMachineSlide = ({
               <span>♀</span> Nữ
             </div>
             <div className="bg-white rounded-2xl h-48 overflow-hidden shadow-inner border-4 border-card relative">
-              <div className="absolute inset-0 flex items-center justify-center">
-                {isSpinning ? (
-                  <div className="flex flex-col gap-2 animate-slot-spin" style={{ animationDelay: '0.3s' }}>
-                    {dummyFemaleNames.map((name, idx) => (
-                      <div key={idx} className="h-48 flex items-center justify-center text-3xl font-black text-primary px-4 text-center">
+              {isSpinning ? (
+                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                  <div className="flex flex-col animate-slot-spin" style={{ animationDelay: '0.3s' }}>
+                    {[...dummyFemaleNames, ...dummyFemaleNames, ...dummyFemaleNames].map((name, idx) => (
+                      <div key={idx} className="h-48 flex items-center justify-center text-3xl font-black text-primary px-4 text-center shrink-0">
                         {name}
                       </div>
                     ))}
                   </div>
-                ) : showResult ? (
+                </div>
+              ) : showResult ? (
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-4xl font-black text-primary px-6 text-center bg-muted rounded-xl py-8 shadow-lg animate-slide-in-up">
                     {femaleName}
                   </div>
-                ) : (
+                </div>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-4xl font-black text-muted-foreground">
                     ???
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
