@@ -8,8 +8,8 @@ interface InputSlideProps {
 }
 
 export const InputSlide = ({ onComplete }: InputSlideProps) => {
-  const [maleNames, setMaleNames] = useState<string[]>(Array(18).fill(""));
-  const [femaleNames, setFemaleNames] = useState<string[]>(Array(18).fill(""));
+  const [maleNames, setMaleNames] = useState<string[]>(Array(3).fill(""));
+  const [femaleNames, setFemaleNames] = useState<string[]>(Array(3).fill(""));
 
   const handleMaleChange = (index: number, value: string) => {
     const newNames = [...maleNames];
@@ -42,7 +42,7 @@ export const InputSlide = ({ onComplete }: InputSlideProps) => {
           </h1>
         </div>
         <p className="text-white/70 mt-4 text-lg">
-          Vui lòng nhập tên 18 nam và 18 nữ tham gia
+          Vui lòng nhập tên 3 nam và 3 nữ tham gia
         </p>
       </div>
 

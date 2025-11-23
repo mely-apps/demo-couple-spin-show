@@ -11,7 +11,7 @@ const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [inputtedMales, setInputtedMales] = useState<string[]>([]);
   const [inputtedFemales, setInputtedFemales] = useState<string[]>([]);
-  const totalSlides = couples.length + 3; // Cover + Input + 18 couples + Ending
+  const totalSlides = couples.length + 3; // Cover + Input + couples + Ending
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -90,31 +90,17 @@ const Index = () => {
       return <EndingSlide />;
     }
 
-    // Couple slides (2-19)
+    // Couple slides - Random selection happens inside SlotMachineSlide
     const coupleIndex = currentSlide - 2;
     const couple = couples[coupleIndex];
-    
-    // Find the inputted names that match this couple (case-insensitive, trim spaces)
-    const findName = (nameToFind: string, nameList: string[]) => {
-      const normalized = nameToFind.toLowerCase().trim();
-      return nameList.find(n => n.toLowerCase().trim() === normalized) || nameToFind;
-    };
-    
-    const displayMale = inputtedMales.length > 0 
-      ? findName(couple.male, inputtedMales)
-      : couple.male;
-    
-    const displayFemale = inputtedFemales.length > 0
-      ? findName(couple.female, inputtedFemales)
-      : couple.female;
     
     return (
       <SlotMachineSlide
         key={currentSlide}
         coupleNumber={couple.id}
         totalCouples={couples.length}
-        maleName={displayMale}
-        femaleName={displayFemale}
+        maleNames={inputtedMales.filter(name => name.trim() !== "")}
+        femaleNames={inputtedFemales.filter(name => name.trim() !== "")}
         onNext={() => setCurrentSlide(currentSlide + 1)}
       />
     );

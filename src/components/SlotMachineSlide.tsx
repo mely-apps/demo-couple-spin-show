@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Heart, RotateCw, Check, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { dummyMaleNames, dummyFemaleNames } from "@/data/couples";
@@ -6,29 +6,88 @@ import { dummyMaleNames, dummyFemaleNames } from "@/data/couples";
 interface SlotMachineSlideProps {
   coupleNumber: number;
   totalCouples: number;
-  maleName: string;
-  femaleName: string;
+  maleNames: string[];
+  femaleNames: string[];
   onNext: () => void;
 }
 
 export const SlotMachineSlide = ({
   coupleNumber,
   totalCouples,
-  maleName,
-  femaleName,
+  maleNames,
+  femaleNames,
   onNext,
 }: SlotMachineSlideProps) => {
   const [isSpinning, setIsSpinning] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [currentMaleName, setCurrentMaleName] = useState<string | null>(null);
   const [currentFemaleName, setCurrentFemaleName] = useState<string | null>(null);
+  const [selectedMaleName, setSelectedMaleName] = useState<string | null>(null);
+  const [selectedFemaleName, setSelectedFemaleName] = useState<string | null>(null);
+  // Track những người đã được chọn trong slide này để không trùng lại
+  const [usedMales, setUsedMales] = useState<Set<string>>(new Set());
+  const [usedFemales, setUsedFemales] = useState<Set<string>>(new Set());
   const spinIntervalRef = useRef<number | null>(null);
 
-  const handleSpin = () => {
-    if (isSpinning || showResult) return;
-
+  // Reset state when component mounts or coupleNumber changes
+  useEffect(() => {
+    setIsSpinning(false);
     setShowResult(false);
+    setCurrentMaleName(null);
+    setCurrentFemaleName(null);
+    setSelectedMaleName(null);
+    setSelectedFemaleName(null);
+    setUsedMales(new Set()); // Reset danh sách đã chọn khi chuyển slide
+    setUsedFemales(new Set());
+    if (spinIntervalRef.current !== null) {
+      clearInterval(spinIntervalRef.current);
+      spinIntervalRef.current = null;
+    }
+  }, [coupleNumber]);
+
+  const handleSpin = () => {
+    if (isSpinning) return;
+
+    // Reset previous result if exists
+    setShowResult(false);
+    setSelectedMaleName(null);
+    setSelectedFemaleName(null);
     setIsSpinning(true);
+
+    // Loại bỏ những người đã được chọn trước đó (không random trùng)
+    const availableMales = maleNames.filter(name => name.trim() !== "" && !usedMales.has(name.trim()));
+    const availableFemales = femaleNames.filter(name => name.trim() !== "" && !usedFemales.has(name.trim()));
+    
+    // Nếu đã chọn hết, reset lại danh sách đã chọn để có thể random lại từ đầu
+    let finalAvailableMales = availableMales;
+    let finalAvailableFemales = availableFemales;
+    
+    if (availableMales.length === 0) {
+      // Reset danh sách nam đã chọn
+      setUsedMales(new Set());
+      finalAvailableMales = maleNames.filter(name => name.trim() !== "");
+    }
+    
+    if (availableFemales.length === 0) {
+      // Reset danh sách nữ đã chọn
+      setUsedFemales(new Set());
+      finalAvailableFemales = femaleNames.filter(name => name.trim() !== "");
+    }
+    
+    const selectedMale = finalAvailableMales.length > 0 
+      ? finalAvailableMales[Math.floor(Math.random() * finalAvailableMales.length)]
+      : "";
+    const selectedFemale = finalAvailableFemales.length > 0
+      ? finalAvailableFemales[Math.floor(Math.random() * finalAvailableFemales.length)]
+      : "";
+    
+    // Đánh dấu những người này đã được chọn
+    if (selectedMale) {
+      setUsedMales(prev => new Set([...prev, selectedMale.trim()]));
+    }
+    if (selectedFemale) {
+      setUsedFemales(prev => new Set([...prev, selectedFemale.trim()]));
+    }
 
     // Start rapidly cycling through names
     spinIntervalRef.current = window.setInterval(() => {
@@ -43,6 +102,8 @@ export const SlotMachineSlide = ({
         spinIntervalRef.current = null;
       }
       setIsSpinning(false);
+      setSelectedMaleName(selectedMale);
+      setSelectedFemaleName(selectedFemale);
       setShowResult(true);
       createConfetti();
     }, 8000);
@@ -116,9 +177,9 @@ export const SlotMachineSlide = ({
                   <div className="text-4xl font-black text-primary px-6 text-center animate-pulse">
                     {currentMaleName ?? ""}
                   </div>
-                ) : showResult ? (
+                ) : showResult && selectedMaleName ? (
                   <div className="text-4xl font-black text-primary px-6 text-center bg-muted rounded-xl py-8 shadow-lg animate-slide-in-up">
-                    {maleName}
+                    {selectedMaleName}
                   </div>
                 ) : (
                   <div className="text-4xl font-black text-muted-foreground">
@@ -147,9 +208,9 @@ export const SlotMachineSlide = ({
                   <div className="text-4xl font-black text-primary px-6 text-center animate-pulse">
                     {currentFemaleName ?? ""}
                   </div>
-                ) : showResult ? (
+                ) : showResult && selectedFemaleName ? (
                   <div className="text-4xl font-black text-primary px-6 text-center bg-muted rounded-xl py-8 shadow-lg animate-slide-in-up">
-                    {femaleName}
+                    {selectedFemaleName}
                   </div>
                 ) : (
                   <div className="text-4xl font-black text-muted-foreground">
@@ -163,36 +224,51 @@ export const SlotMachineSlide = ({
       </div>
 
       {/* Controls */}
-      <Button
-        onClick={showResult ? onNext : handleSpin}
-        disabled={isSpinning}
-        size="lg"
-        className="mt-8 text-4xl px-16 py-8 rounded-full shadow-2xl font-black z-10 animate-slide-in-up"
-        style={{ 
-          animationDelay: '0.4s',
-          fontFamily: "'Pacifico', cursive",
-          backgroundColor: showResult ? 'hsl(var(--celebration))' : 'hsl(var(--secondary))',
-          color: 'hsl(var(--primary))',
-          boxShadow: '0 8px 0 hsl(var(--accent))',
-        }}
-      >
-        {isSpinning ? (
-          <>
-            <RotateCw className="mr-3 animate-spin" />
-            Đang quay...
-          </>
-        ) : showResult ? (
-          <>
+      <div className="flex gap-4 items-center mt-8 z-10">
+        <Button
+          onClick={handleSpin}
+          disabled={isSpinning}
+          size="lg"
+          className="text-4xl px-16 py-8 rounded-full shadow-2xl font-black animate-slide-in-up"
+          style={{ 
+            animationDelay: '0.4s',
+            fontFamily: "'Pacifico', cursive",
+            backgroundColor: 'hsl(var(--secondary))',
+            color: 'hsl(var(--primary))',
+            boxShadow: '0 8px 0 hsl(var(--accent))',
+          }}
+        >
+          {isSpinning ? (
+            <>
+              <RotateCw className="mr-3 animate-spin" />
+              Đang quay...
+            </>
+          ) : (
+            <>
+              <RotateCw className="mr-3" />
+              Quay Số
+            </>
+          )}
+        </Button>
+        
+        {showResult && (
+          <Button
+            onClick={onNext}
+            size="lg"
+            className="text-3xl px-12 py-8 rounded-full shadow-2xl font-black animate-slide-in-up"
+            style={{ 
+              animationDelay: '0.5s',
+              fontFamily: "'Pacifico', cursive",
+              backgroundColor: 'hsl(var(--celebration))',
+              color: 'hsl(var(--primary))',
+              boxShadow: '0 8px 0 hsl(var(--accent))',
+            }}
+          >
             <Check className="mr-3" />
             Hoàn Thành
-          </>
-        ) : (
-          <>
-            <RotateCw className="mr-3" />
-            Quay Số
-          </>
+          </Button>
         )}
-      </Button>
+      </div>
 
       {/* Subtext */}
       <p className="mt-6 text-white/60 text-sm italic z-10">

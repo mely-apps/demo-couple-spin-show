@@ -8,21 +8,6 @@ export const couples: Couple[] = [
   { id: 1, male: "Trần thế Anh", female: "Phạm Trà My" },
   { id: 2, male: "Đỗ Đạt", female: "Lại thị thuỳ Dung" },
   { id: 3, male: "nguyễn đăng kiên", female: "Phương Nguyễn" },
-  { id: 4, male: "Nguyễn Đăng Trung", female: "C Mai Phương (vợ a Quân)" },
-  { id: 5, male: "Đỗ trung hậu", female: "lê thị quyên" },
-  { id: 6, male: "Dũng Béo", female: "Doàn Thị Thùy Ngân" },
-  { id: 7, male: "Lê xuân Dũng", female: "Lưu huyền trang" },
-  { id: 8, male: "Nguyễn Phương Nam", female: "Thu Hoài" },
-  { id: 9, male: "Trần văn Dương", female: "NGỌC LINH" },
-  { id: 10, male: "Nguyễn Văn Sơn", female: "Nguyễn thị hiếu" },
-  { id: 11, male: "Nguyễn Mạnh Hà", female: "Đặng Thị Thanh" },
-  { id: 12, male: "Nguyễn Quốc", female: "Kim Anh" },
-  { id: 13, male: "Mr Thưởng", female: "Thảo (Hoa An viên sáng)" },
-  { id: 14, male: "Phạm Ngọc Tú", female: "Hà My" },
-  { id: 15, male: "Duong ngọc nghĩa", female: "Phương Thảo" },
-  { id: 16, male: "Phan Hải", female: "NHƯ YẾN" },
-  { id: 17, male: "A Sơn trọc", female: "Hoàng Lê" },
-  { id: 18, male: "Minh", female: "Nguyễn thu hoài" },
 ];
 
 // Dummy names for slot animation
